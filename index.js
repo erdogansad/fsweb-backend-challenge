@@ -1,4 +1,5 @@
 const app = require("./api/server.js");
 require("dotenv").config();
+const port = process.env.PORT || 5000;
 
-app.listen(process.env.PORT, () => console.log(`\n== API Running on port ${process.env.PORT} ==\n`));
+app.listen(port, () => console.log(`\n== API Running on port ${port} ==\n`));
