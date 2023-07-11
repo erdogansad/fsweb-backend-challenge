@@ -1,6 +1,8 @@
-const { getByFilter, createToken } = require("../auth/auth-modal");
+const { getByFilter } = require("../auth/auth-modal");
 const yup = require("yup");
 const bcryptjs = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const secret = require("../../../../jwtSecret.js");
 
 const userSchema = yup.object().shape({
   bio: yup.string().max(100, "bio must be less than 100 characters long"),
@@ -47,8 +49,10 @@ const loginController = async (req, res, next) => {
       validate = username ? await getByFilter({ username }) : email ? await getByFilter({ email }) : false,
       compare = validate ? await bcryptjs.compare(password, validate.password) : false;
     if (validate && compare) {
-      let token = await createToken(validate.user_id);
-      req.user = { ...validate, token };
+      let data = { ...validate };
+      delete data.password;
+      let token = jwt.sign({ data }, secret.JWT_SECRET, { expiresIn: "7d" });
+      req.user = { ...data, token };
       next();
     } else {
       next({ status: 401, message: "invalid credentials" });
