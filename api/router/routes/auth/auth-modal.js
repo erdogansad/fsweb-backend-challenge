@@ -1,5 +1,6 @@
 const db = require("../../../../data/config");
 const crypto = require("crypto");
+const moment = require("moment");
 
 const create = (user) => {
   return db("users").insert(user);
@@ -11,7 +12,7 @@ const createToken = async (user_id) => {
     await db("tokens").where("user_id", user_id).del();
   }
   const newToken = crypto.randomBytes(32).toString("hex");
-  let query = db("tokens").insert({ token: newToken, user_id, expires_at: Date.now() + 1000 * 60 * 60 * 24 * 7 });
+  let query = await db("tokens").insert({ token: newToken, user_id, expires_at: moment().add(7, "days").format("YYYY-MM-DD HH:mm:ss") });
   return query ? newToken : false;
 };
 
