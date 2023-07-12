@@ -1,6 +1,6 @@
 const router = require("express").Router();
-const { create } = require("../auth/auth-modal");
-const { registerController, loginController } = require("./auth-middlewares");
+const { create } = require("./auth-modal.js");
+const { registerController, loginController } = require("./auth-middlewares.js");
 
 router.post("/register", registerController, async (req, res, next) => {
   try {

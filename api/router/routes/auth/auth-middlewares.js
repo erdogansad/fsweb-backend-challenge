@@ -1,8 +1,8 @@
-const { getByFilter } = require("../auth/auth-modal");
 const yup = require("yup");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const secret = require("../../../../jwtSecret.js");
+const { getByFilter } = require("#auth/auth-modal.js");
+const secret = require("#data/jwtSecret.js");
 
 const userSchema = yup.object().shape({
   bio: yup.string().max(100, "bio must be less than 100 characters long"),
