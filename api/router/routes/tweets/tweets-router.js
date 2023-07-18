@@ -72,9 +72,13 @@ router.get("/:id/mentions", tweetController, async (req, res, next) => {
 
 router.post("/:id/mentions", tweetController, async (req, res, next) => {
   try {
-    let data = { user_id: req.decoded.data.user_id, tweet_id: req.params.id, mention: req.body.mention };
-    const query = await createMention(data);
-    res.status(200).json(query);
+    if (req.body.mention) {
+      let data = { user_id: req.decoded.data.user_id, tweet_id: req.params.id, mention: req.body.mention };
+      const query = await createMention(data);
+      res.status(201).json(query);
+    } else {
+      next({ status: 400, message: "mention required." });
+    }
   } catch (e) {
     next(e);
   }
