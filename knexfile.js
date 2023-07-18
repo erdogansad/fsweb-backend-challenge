@@ -1,3 +1,4 @@
+const path = require("path");
 const config = {
   client: "sqlite3",
   useNullAsDefault: true,
@@ -10,7 +11,7 @@ module.exports = {
     ...config,
     seeds: { directory: "./data/seeds" },
 
-    connection: { filename: "./data/database.db3" },
+    connection: { filename: path.resolve(__dirname, "data/database.db3") },
   },
   testing: {
     ...config,
