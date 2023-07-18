@@ -1,4 +1,4 @@
-const { getById } = require("./tweets-modal.js");
+const { getById, getMentionById } = require("./tweets-modal.js");
 
 const tweetController = async (req, res, next) => {
   try {
@@ -8,6 +8,20 @@ const tweetController = async (req, res, next) => {
       next();
     } else {
       next({ status: 404, message: "tweet not found." });
+    }
+  } catch (e) {
+    next(e);
+  }
+};
+
+const mentionController = async (req, res, next) => {
+  try {
+    let query = await getMentionById(req.params.mention_id);
+    if (query && query.tweet_id === Number(req.params.id)) {
+      req.mention = query;
+      next();
+    } else {
+      next({ status: 404, message: "mention not found." });
     }
   } catch (e) {
     next(e);
@@ -25,4 +39,4 @@ const bodyController = (req, res, next) => {
   }
 };
 
-module.exports = { tweetController, bodyController };
+module.exports = { tweetController, mentionController, bodyController };
